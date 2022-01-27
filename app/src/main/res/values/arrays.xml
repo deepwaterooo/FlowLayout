@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string-array name="tags">
+    <item>美妆</item>
+    <item>画板</item>
+    <item>漫画</item>
+    <item>高科技</item>
+    <item>韩国电影</item>
+    <item>股票</item>
+    <item>美术</item>
+    <item>高富帅</item>
+    <item>鸿泰安</item>
+    <item>运动</item>
+    <item>外语</item>
+    <item>财经</item>
+    <item>大叔</item>
+    <item>非主流</item>
+    <item>暴走漫画</item>
+    <item>心理学</item>
+    <item>汉语</item>
+    <item>白富美</item>
+    <item>自定义</item>
+  </string-array>
+</resources>

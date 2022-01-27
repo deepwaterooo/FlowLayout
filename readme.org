@@ -1,0 +1,9 @@
+#+latex_class: cn-article
+#+title: Android Custom ViewGroup - Flowlayout
+#+author: deepwaterooo
+
+* Android Custom View & ViewGroup
+- Basic Functions are done, a few more features want to be implemented
+  
+[[./pic/imgs.png]]
+

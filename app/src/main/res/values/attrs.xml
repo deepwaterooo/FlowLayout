@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <!-- <declare-styleable name="FlowLayoutTwo"> -->
+    <!-- 自定义的属性名称 和对应的单位 -->
+
+    <!--每个item纵向间距-->
+    <attr name="verticalSpacing" format="dimension" />
+    <!-- 每个item横向间距-->
+    <attr name="horizontalSpacing" format="dimension" />
+
+    <declare-styleable name="FlowLayout">
+      <attr name="verticalSpacing" />
+      <attr name="horizontalSpacing" />
+    </declare-styleable>
+
+</resources>
