@@ -1,10 +1,14 @@
 package com.me.cusviewgroup;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,73 +17,133 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.internal.FlowLayout;
+import com.library.flowlayout.FlowLayoutManager;
+import com.library.flowlayout.SpaceItemDecoration;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.me.cusviewgroup.R.id.flow1;
 
 // 这里适配器有bug，可以参考前面 scrollview动态添加，和点击监听，曲线解决这个bug
 // 可以放在recyclerview中，也可以用relative layout动态添加
 public class TwoCusListenerActivity extends AppCompatActivity {
 
-    private FlowLayout flow1, flow2;
-    private FlowLayoutAdapter mMyLabelAdapter, mHotLabelAdapter;
-    private List<String> MyLabelLists, HotLabelLists;
+    private List<ShowItem> list = new ArrayList<>();
+    private Handler handler = new Handler();
 
-    private static int TAG_REQUESTCODE = 0x101;
+    private FlowAdapter flowAdapter;
+
+    // private FlowLayout flow1, flow2;
+    // private FlowLayoutAdapter mMyLabelAdapter, mHotLabelAdapter;
+    // private List<String> MyLabelLists, HotLabelLists;
+
+    // private static int TAG_REQUESTCODE = 0x101;
 
     @Override
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_two_flowgroupviwe);
+        setContentView(R.layout.flow);
         initView();
-        initData();
+        // initData();
     }
 
     private void initView() {
         final RecyclerView recyclerView1 = (RecyclerView)findViewById(flow1);
-        final RecyclerView recyclerView2 = (RecyclerView)findViewById(flow2);
+        final RecyclerView recyclerView2 = (RecyclerView)findViewById(R.id.flow2);
 
         FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
-        recyclerView.addItemDecoration(new SpaceItemDecoration(dp2px(10)));
-        recyclerView.setLayoutManager(flowLayoutManager);
+        recyclerView1.addItemDecoration(new SpaceItemDecoration(dp2px(10)));
+        recyclerView1.setLayoutManager(flowLayoutManager);
         list = DataConfig.getItems();
-        recyclerView.setAdapter(flowAdapter = new FlowAdapter(list));
-        
+        recyclerView1.setAdapter(flowAdapter = new FlowAdapter(list));
+        // 模拟网络的代码
+        handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    list.clear();
+                    flowAdapter.notifyDataSetChanged();
+                }
+            }, 2000); // 这里的两秒钟设置得不好，不够灵活与动态
     }
 
-    private void initData() {
-        String[] date = getResources().getStringArray(R.array.tags);
-        HotLabelLists = new ArrayList<>();
-        for (int i = 0; i < date.length; i++) {
-            HotLabelLists.add(date[i]);
+//     private void initData() {
+//         String[] date = getResources().getStringArray(R.array.tags);
+//         HotLabelLists = new ArrayList<>();
+//         for (int i = 0; i < date.length; i++) {
+//             HotLabelLists.add(date[i]);
+//         }
+//         mHotLabelAdapter = new FlowLayoutAdapter(this, HotLabelLists);
+// //        flow2.setAdapter(mHotLabelAdapter);
+// //        flow2.setItemClickListener(new TagCloudLayoutItemOnClick(1));
+
+//         MyLabelLists = new ArrayList<>();
+//         mMyLabelAdapter = new FlowLayoutAdapter(this, MyLabelLists);
+// //        flow1.setAdapter(mMyLabelAdapter);
+// //        flow1.setItemClickListener(new TagCloudLayoutItemOnClick(0));
+
+//         String labels = String.valueOf(getIntent().getStringExtra("labels"));
+//         if (!TextUtils.isEmpty(labels) && labels.length() > 0
+//             && !labels.equals("null")) {
+//             String[] temp = labels.split(",");
+//             for (int i = 0; i < temp.length; i++) {
+//                 MyLabelLists.add(temp[i]);
+//             }
+//             ChangeMyLabels();
+//         }
+
+//     }
+
+    //  // 刷新我的标签数据
+    // private void ChangeMyLabels() {
+    //     flow1.setVisibility(MyLabelLists.size() > 0 ? View.VISIBLE
+    //                                : View.GONE);
+    //     mMyLabelAdapter.notifyDataSetChanged();
+    // }
+
+    class FlowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        private List<ShowItem> list;
+
+        public FlowAdapter(List<ShowItem> list) {
+            this.list = list;
         }
-        mHotLabelAdapter = new FlowLayoutAdapter(this, HotLabelLists);
-//        flow2.setAdapter(mHotLabelAdapter);
-//        flow2.setItemClickListener(new TagCloudLayoutItemOnClick(1));
 
-        MyLabelLists = new ArrayList<>();
-        mMyLabelAdapter = new FlowLayoutAdapter(this, MyLabelLists);
-//        flow1.setAdapter(mMyLabelAdapter);
-//        flow1.setItemClickListener(new TagCloudLayoutItemOnClick(0));
+        @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new MyHolder(View.inflate(TwoCusListenerActivity.this, R.layout.flow_item, null));
+        }
 
-        String labels = String.valueOf(getIntent().getStringExtra("labels"));
-        if (!TextUtils.isEmpty(labels) && labels.length() > 0
-            && !labels.equals("null")) {
-            String[] temp = labels.split(",");
-            for (int i = 0; i < temp.length; i++) {
-                MyLabelLists.add(temp[i]);
+        @Override
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+            TextView textView = ((MyHolder) holder).text;
+            textView.setBackgroundDrawable(list.get(position).color);
+            textView.setText(list.get(position).des);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                        public void onClick(View v) {
+                        Toast.makeText(TwoCusListenerActivity.this, list.get(position).des, Toast.LENGTH_SHORT).show();
+                    }
+                });
+        }
+
+        @Override
+            public int getItemCount() {
+            return list.size();
+        }
+
+        class MyHolder extends RecyclerView.ViewHolder {
+            private TextView text;
+            public MyHolder(View itemView) {
+                super(itemView);
+                text = (TextView) itemView.findViewById(R.id.flow_text);
             }
-            ChangeMyLabels();
         }
-
     }
-
-     // 刷新我的标签数据
-    private void ChangeMyLabels() {
-        flow1.setVisibility(MyLabelLists.size() > 0 ? View.VISIBLE
-                                   : View.GONE);
-        mMyLabelAdapter.notifyDataSetChanged();
+    private int dp2px(float value) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, getResources().getDisplayMetrics());
     }
-
+}
     //  // 标签的点击事件
     //  // @author lijuan
     // class TagCloudLayoutItemOnClick implements FlowLayout.TagItemClickListener {
@@ -146,7 +210,7 @@ public class TwoCusListenerActivity extends AppCompatActivity {
     //         }
     //     }
     // }
-}
+// }
 
 // public class TwoCusListenerActivity extends AppCompatActivity {
 // LayoutInflater mInflater;

@@ -4,6 +4,9 @@
 
 * Android Custom View & ViewGroup
 - Basic Functions are done, a few more features want to be implemented
+- applied using androidx RecyclerView, but not ideal for the simple
+  target of two relative views. But still, considered a fairly good
+  practice. 
   
 [[./pic/imgs.png]]
 

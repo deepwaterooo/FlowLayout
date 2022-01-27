@@ -4,10 +4,11 @@
           android:layout_height="wrap_content"
           android:layout_margin="5dp"
           android:background="@drawable/tv_bg"
-          android:id="@+id/tv_test_content"
+          android:id="@+id/flow_text"
           android:textColor="#5BC4ED"
           android:text="Helloworld" >
 </TextView>
+<!-- android:id="@+id/tv_test_content" -->
 <!-- <TextView xmlns:android="http://schemas.android.com/apk/res/android" -->
 <!--           android:layout_width="wrap_content" -->
 <!--           android:layout_height="wrap_content" -->
